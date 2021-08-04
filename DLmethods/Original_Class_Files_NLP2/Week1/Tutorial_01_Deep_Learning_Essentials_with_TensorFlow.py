@@ -27,7 +27,7 @@ import sklearn
 import tensorflow as tf
 
 
-# In[ ]:
+
 
 
 print(tf.__version__)
@@ -45,7 +45,7 @@ print(tf.__version__)
 # 
 # The name ``tf.constant`` comes from the value being embeded in a _Const_ node in the ``tf.Graph``. ``tf.constant`` is useful for asserting that the value can be embedded that way.
 
-# In[ ]:
+
 
 
 t = tf.constant([[1., 2., 3.], 
@@ -53,14 +53,14 @@ t = tf.constant([[1., 2., 3.],
 t
 
 
-# In[ ]:
+
 
 
 # data type
 t.dtype
 
 
-# In[ ]:
+
 
 
 # shape
@@ -73,21 +73,21 @@ t.shape
 # 
 # Variables are created and tracked via the ``tf.Variable`` class. A ``tf.Variable`` represents a tensor whose value can be changed by running ops on it. Specific ops allow you to read and modify the values of this tensor. Higher level libraries like ``tf.keras`` use ``tf.Variable`` to store model parameters.
 
-# In[ ]:
+
 
 
 t = tf.Variable([[1., 2., 3.], [4., 5., 6.]])
 t
 
 
-# In[ ]:
+
 
 
 # convert to numpy
 t.numpy()
 
 
-# In[ ]:
+
 
 
 # assign value to tensor
@@ -95,14 +95,14 @@ t[0,0].assign(99)
 t
 
 
-# In[ ]:
+
 
 
 # incorrect method
 t[1] = [10, 20, 30]
 
 
-# In[ ]:
+
 
 
 # correct method
@@ -113,19 +113,19 @@ t[1].assign([10, 20, 30])
 # 
 # Indexing of tensors is similar to ``numpy``. The following examples showcase typical ways of indexing a tensor
 
-# In[ ]:
+
 
 
 t[1:, :]
 
 
-# In[ ]:
+
 
 
 t[1:, ...]
 
 
-# In[ ]:
+
 
 
 t[..., 1:]
@@ -135,7 +135,7 @@ t[..., 1:]
 # 
 # TensorFlow tensors support all typical mathematical operations. They also support a number of inbuilt functions/utilities like square, transpose, etc.
 
-# In[ ]:
+
 
 
 # addition
@@ -143,14 +143,14 @@ t = t + 10
 t
 
 
-# In[ ]:
+
 
 
 # inbuilt utils
 tf.square(t)
 
 
-# In[ ]:
+
 
 
 # inbuilt utils
@@ -165,7 +165,7 @@ t @ tf.transpose(t)
 # 
 # We will build a simple linear regression model for this given task
 
-# In[ ]:
+
 
 
 from sklearn.datasets import fetch_california_housing
@@ -174,28 +174,34 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_squared_error
 
+# this is needed to get data from sklearn.datasets (at least of the 'fetch' variety)
+# do not know how this works. I consider myself smart enough at the moment.
+import os, ssl
+if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
+    getattr(ssl, '_create_unverified_context', None)):
+    ssl._create_default_https_context = ssl._create_unverified_context
 
-# In[ ]:
+
 
 
 housing = fetch_california_housing()
 
 
-# In[ ]:
+
 
 
 X = pd.DataFrame(housing['data'], columns=housing['feature_names'])
 X.head()
 
 
-# In[ ]:
+
 
 
 y = pd.DataFrame({'price': housing['target']})
 y.head()
 
 
-# In[ ]:
+
 
 
 # train test split
@@ -203,7 +209,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 X_train.shape, X_test.shape
 
 
-# In[ ]:
+
 
 
 # scale features
@@ -212,7 +218,7 @@ X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
 
-# In[ ]:
+
 
 
 # fit model
@@ -220,7 +226,7 @@ lr = LinearRegression()
 lr.fit(X_train_scaled, y_train)
 
 
-# In[ ]:
+
 
 
 # evaluate model
@@ -242,7 +248,7 @@ print('MSE:', mean_squared_error(y_test, predictions))
 # 
 # In this section, we will build a neural network based regression model to predict housing prices. We will reuse the train-test split from the ``sklearn`` exercise for consitentcy.
 
-# In[ ]:
+
 
 
 # define the model
@@ -266,14 +272,14 @@ model = tf.keras.models.Sequential([
 # 
 # __Tip__: Recall that the MSE is the mean of the squares of prediction errors, which are the differences between the predictions and the labels, so you will need to use ``tf.reduce_mean()`` and ``tf.square()`` ops.
 
-# In[ ]:
+
 
 
 def mse_loss(y_true, y_pred):
     return tf.reduce_mean(tf.square(y_pred - y_true))
 
 
-# In[ ]:
+
 
 
 # compile the model
@@ -282,14 +288,14 @@ model.compile(loss=mse_loss,
               metrics=['mean_squared_error'])
 
 
-# In[ ]:
+
 
 
 # get model summary
 model.summary()
 
 
-# In[ ]:
+
 
 
 # train/fit the model
@@ -299,7 +305,7 @@ history = model.fit(X_train_scaled, y_train,
                     validation_split=0.1)
 
 
-# In[ ]:
+
 
 
 # visualize training progress
@@ -307,7 +313,7 @@ history_df = pd.DataFrame(history.history)
 history_df[['loss', 'val_loss']].plot(kind='line')
 
 
-# In[ ]:
+
 
 
 # evaluate model
@@ -335,7 +341,7 @@ print('MSE:', mean_squared_error(y_test, predictions))
 # + SoftPlus
 # + LeakyReLU
 
-# In[ ]:
+
 
 
 z = np.linspace(-5, 5, 200)
@@ -350,7 +356,7 @@ plt.title("Activation functions", fontsize=14)
 plt.axis([-5, 5, -1.2, 2]);
 
 
-# In[ ]:
+
 
 
 # some more activation functions
@@ -377,13 +383,13 @@ plt.axis([-5, 5, -1.2, 2])
 # 
 # The following is a list of possible initializers available in the framework
 
-# In[ ]:
+
 
 
 [name for name in dir(tf.keras.initializers) if not name.startswith("_")]
 
 
-# In[ ]:
+
 
 
 # uniform
@@ -393,7 +399,7 @@ y = dense1(input_x)
 plt.hist(dense1.weights[0][0]);
 
 
-# In[ ]:
+
 
 
 # glorot
@@ -421,7 +427,7 @@ plt.hist(dense1.weights[0][0]);
 # + Create a tf.keras.models.Model and specify its inputs and outputs (e.g., ``inputs=[input]``).
 # + Then use this model just like a Sequential model: you need to compile it, display its summary, train it, evaluate it and use it to make predictions.
 
-# In[ ]:
+
 
 
 # define the model
@@ -437,7 +443,7 @@ concat = tf.keras.layers.concatenate([input, x])
 output = tf.keras.layers.Dense(1)(concat)
 
 
-# In[ ]:
+
 
 
 # compile the model
@@ -448,14 +454,14 @@ model.compile(loss="mean_squared_error",
 model.summary()
 
 
-# In[ ]:
+
 
 
 # visulize the model
 tf.keras.utils.plot_model(model, show_shapes=True)
 
 
-# In[ ]:
+
 
 
 # train/fit the model
@@ -465,7 +471,7 @@ history = model.fit(X_train_scaled, y_train,
                     validation_split=0.1)
 
 
-# In[ ]:
+
 
 
 # plot training progress
@@ -473,7 +479,7 @@ history_df = pd.DataFrame(history.history)
 history_df[['loss', 'val_loss']].plot(kind='line')
 
 
-# In[ ]:
+
 
 
 # evaluate model
@@ -501,7 +507,7 @@ print('MSE:', mean_squared_error(y_test, predictions))
 # 
 # + However, this extra flexibility comes at the cost of less transparency. Since the model is defined within the call() method, Keras cannot fully inspect it. All it sees is the list of model attributes (which include the layers you define in the constructor), so when you display the model summary you just see a list of unconnected layers. Consequently, you cannot save or load the model without writing extra code. So this API is best used only when you really need the extra flexibility.
 
-# In[ ]:
+
 
 
 # define a custom model class
@@ -523,7 +529,7 @@ class MyRegressionModel(tf.keras.models.Model):
         return output
 
 
-# In[ ]:
+
 
 
 # instantiate and compile custom model object
@@ -532,7 +538,7 @@ model.compile(loss="mean_squared_error",
               optimizer=tf.keras.optimizers.SGD(1e-3))
 
 
-# In[ ]:
+
 
 
 # train/fit the model
@@ -542,7 +548,7 @@ history = model.fit(X_train_scaled, y_train,
                     validation_split=0.1)
 
 
-# In[ ]:
+
 
 
 # plot training progress
@@ -550,7 +556,7 @@ history_df = pd.DataFrame(history.history)
 history_df[['loss', 'val_loss']].plot(kind='line')
 
 
-# In[ ]:
+
 
 
 # evaluate model performance
@@ -573,27 +579,27 @@ print('MSE:', mean_squared_error(y_test, predictions))
 # 
 # 
 
-# In[ ]:
+
 
 
 def f(x):
     return 5. * x ** 2 + 3. * x + 1.
 
 
-# In[ ]:
+
 
 
 f(1)
 
 
-# In[ ]:
+
 
 
 def approximate_diff(f, x, eps=1e-5):
     return (f(x + eps) - f(x - eps)) / (2. * eps)
 
 
-# In[ ]:
+
 
 
 approximate_diff(f, 1) # true derivative = 13
@@ -601,7 +607,7 @@ approximate_diff(f, 1) # true derivative = 13
 
 # ### Visualize function space
 
-# In[ ]:
+
 
 
 xs = np.linspace(-2, 2, 200)
@@ -622,7 +628,7 @@ plt.axis([-2, 2, -5, 15]);
 
 # ### Gradient Tape for fast diff
 
-# In[ ]:
+
 
 
 x = tf.Variable(1.0)
@@ -633,7 +639,7 @@ grads = tape.gradient(z, [x])
 grads
 
 
-# In[ ]:
+
 
 
 x = tf.Variable(0.)
@@ -646,14 +652,14 @@ grads
 
 # ### Gradient descent with Gradient Tape
 
-# In[ ]:
+
 
 
 def f(x):
     return 5 * x ** 2 + 3 * x + 1.
 
 
-# In[ ]:
+
 
 
 xs = np.linspace(-2, 2, 200)
@@ -672,7 +678,7 @@ plt.ylabel("f(x)", fontsize=14, rotation=0)
 plt.axis([-2, 2, -5, 15]);
 
 
-# In[ ]:
+
 
 
 learning_rate = 0.1
@@ -686,19 +692,19 @@ for i, epoch in enumerate(range(10)):
     x.assign_sub(learning_rate * dz_dx)
 
 
-# In[ ]:
+
 
 
 x.numpy()
 
 
-# In[ ]:
+
 
 
 f(x.numpy())
 
 
-# In[ ]:
+
 
 
 xs = np.linspace(-2, 2, 200)
@@ -717,7 +723,7 @@ plt.ylabel("f(x)", fontsize=14, rotation=0)
 plt.axis([-2, 2, -5, 15]);
 
 
-# In[ ]:
+
 
 
 learning_rate = 0.01
@@ -731,19 +737,19 @@ for i, epoch in enumerate(range(150)):
     x.assign_sub(learning_rate * dz_dx)
 
 
-# In[ ]:
+
 
 
 x.numpy()
 
 
-# In[ ]:
+
 
 
 f(x.numpy())
 
 
-# In[ ]:
+
 
 
 x = tf.Variable(0.)
@@ -757,7 +763,7 @@ for iteration in range(150):
     optimizer.apply_gradients([(dz_dx, x)])
 
 
-# In[ ]:
+
 
 
 x.numpy()
@@ -775,7 +781,7 @@ x.numpy()
 # 
 # __Note__: Although these are really images, they are loaded as NumPy arrays and not binary image objects.
 
-# In[ ]:
+
 
 
 # get the dataset
@@ -785,7 +791,7 @@ fashion_mnist = tf.keras.datasets.fashion_mnist
 X_train.shape, X_test.shape
 
 
-# In[ ]:
+
 
 
 # scale pixel densities
@@ -793,14 +799,14 @@ X_train = X_train / 255.
 X_test = X_test / 255.
 
 
-# In[ ]:
+
 
 
 # visualize a sample datapoint
 plt.imshow(X_train[0], cmap="binary");
 
 
-# In[ ]:
+
 
 
 # humanise class labels
@@ -808,7 +814,7 @@ class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
                "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
 
 
-# In[ ]:
+
 
 
 # plot a few examples
@@ -825,7 +831,7 @@ for row in range(n_rows):
 plt.subplots_adjust(wspace=0.2, hspace=0.5);
 
 
-# In[ ]:
+
 
 
 # set seeds for reproducibility
@@ -842,7 +848,7 @@ tf.random.set_seed(42)
 # + Another Dense layer with $100$ neurons, also with the __"relu"__ activation function.
 # + A final Dense layer with $10$ neurons (one per class), and with the __"softmax"__ activation function to ensure that the sum of all the estimated class probabilities for each image is equal to $1$.
 
-# In[ ]:
+
 
 
 model = tf.keras.models.Sequential([
@@ -854,7 +860,7 @@ model = tf.keras.models.Sequential([
 ])
 
 
-# In[ ]:
+
 
 
 # compile the model
@@ -864,7 +870,7 @@ model.compile(loss="sparse_categorical_crossentropy",
 model.summary()
 
 
-# In[ ]:
+
 
 
 # train/fit the model
@@ -874,7 +880,7 @@ history = model.fit(X_train, y_train,
                     validation_split=0.1)
 
 
-# In[ ]:
+
 
 
 # plot training progress
@@ -883,7 +889,7 @@ plt.grid(True)
 plt.gca().set_ylim(0.3, 1);
 
 
-# In[ ]:
+
 
 
 # get predictions
@@ -894,13 +900,13 @@ y_pred = model.predict(X_test)
 # 
 # Use ``np.argmax()`` to get the class ID of the most likely class for each instance. Tip: you want to set ``axis=1``.
 
-# In[ ]:
+
 
 
 y_pred = y_pred.argmax(axis=1)
 
 
-# In[ ]:
+
 
 
 # evaluate model
@@ -920,7 +926,7 @@ print(classification_report(y_test, y_pred,
 
 # ## Build a model with Batch-Normalization
 
-# In[ ]:
+
 
 
 model = tf.keras.models.Sequential([            
@@ -939,7 +945,7 @@ model = tf.keras.models.Sequential([
 ])
 
 
-# In[ ]:
+
 
 
 # compile model
@@ -949,7 +955,7 @@ model.compile(loss="sparse_categorical_crossentropy",
 model.summary()
 
 
-# In[ ]:
+
 
 
 # fit/train the model
@@ -957,7 +963,7 @@ history = model.fit(X_train, y_train, epochs=20,
                     validation_split=0.1)
 
 
-# In[ ]:
+
 
 
 # visualize training progress
@@ -966,7 +972,7 @@ plt.grid(True)
 plt.gca().set_ylim(0.3, 1);
 
 
-# In[ ]:
+
 
 
 # evaluate model performance
@@ -987,7 +993,7 @@ print(classification_report(y_test, y_pred,
 # 
 # Refer to the paper from Hinton et. al. discussing this in detail: [paper](https://jmlr.org/papers/v15/srivastava14a.html)
 
-# In[ ]:
+
 
 
 # define model
@@ -1011,7 +1017,7 @@ history = model.fit(X_train, y_train, epochs=20,
                     validation_split=0.1)
 
 
-# In[ ]:
+
 
 
 # evaluate model
