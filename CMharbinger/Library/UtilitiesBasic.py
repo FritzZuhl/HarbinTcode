@@ -4,9 +4,13 @@ import pandas
 import collections
 # import nltk
 
-# A good list flattener when dealing with lists that either have text, or deeper lists.
-# Cannot be used on super deep lists, because you can run into recursion limits.
 def flatten(list_of_lists):
+    '''
+    Flattens a list of lists. Works best when all lists have strings for elements.
+    :param list_of_lists: a list of strings or many-layered list of strings.
+    :return: a flatten list
+    :warning: input cannot be too deep, else it will trigger recursion limit error.
+    '''
     if len(list_of_lists) == 0:
         return list_of_lists
     if isinstance(list_of_lists[0], list):
@@ -14,9 +18,14 @@ def flatten(list_of_lists):
     return list_of_lists[:1] + flatten(list_of_lists[1:])
 
 def count_tokens_out_df(data):
-    list_of_strings = data
+    '''
+    Counts the tokens in a list. Makes no assumptions about the tokenization
+    :param data: a list made of tokens, usually tokenized from a document
+    :return: a dataframe with words and their counts
+    '''
+    list_of_tokens = data
     try:
-        counts = collections.Counter(list_of_strings)
+        counts = collections.Counter(list_of_tokens)
     except:
         print("Cannot count input.")
         exit()
