@@ -1,14 +1,20 @@
 
 import unittest
+import pandas
+
+# Functions to test
 from UtilitiesBasic import flatten
+from UtilitiesBasic import count_tokens_out_df
 
 class TestFlatten(unittest.TestCase):
-
     def test_flatten(self):
-        list1Test = ['a', ['b', 'c']]
-        list1Expect = ['a', 'b', 'c']
-        self.assertEqual(list1Expect, flatten(list1Test))
+        import TestData
+        self.assertEqual(TestData.list1Expect, flatten(TestData.list1Test))
         #
-        list2Test =  ['a', 'b', 'c']
-        list2Expect = ['a', 'b', 'c']
-        self.assertEqual(list2Expect, flatten(list2Test))
+        self.assertEqual(TestData.list2Expect, flatten(TestData.list2Test))
+
+class TestCount_tokens_out_df(unittest.TestCase):
+    def test_direct_count_fast(self):
+        import TestData
+        pandas._testing.assert_frame_equal(TestData.doc2_Expect,
+                                           count_tokens_out_df(TestData.doc2))
